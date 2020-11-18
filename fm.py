@@ -36,18 +36,24 @@ def per(event):
     upd()
 
 def upd():
-    global left, right
+    global left, right, line
     
     left.config(height=root.winfo_height()-80)
     right.config(height=root.winfo_height()-80)
 
-    rast = 5
+    line.config(to=len(stdlist), length=root.winfo_height()-85)
+    line.place(x=root.winfo_width()-380)
+
+    rast = 30 - int(line.get()) * 30
     for i in range(len(stdlist)):
         name_btn = "btn" + str(i)
         exec(
 "{0}.place(x=10, y=rast)\n\
 ".format(name_btn))
         rast += 30
+
+def vn(event):
+    upd()
 
 def destr(x, y):
     global rast
@@ -68,10 +74,13 @@ root.minsize(1000, 600)
 root.title(stdpath)
 
 left = Frame(root, width=333, height=560, bg="gray76")
-right = Frame(root, width=4000, height=560, bg="lemon chiffon")
-
 left.place(x=0, y=80)
+
+right = Frame(root, width=4000, height=560, bg="lemon chiffon")
 right.place(x=333, y=80)
+
+line = Scale(right, from_ = 1, to = len(stdlist), bg="lemon chiffon")
+line.place(x=1, y=0)
 
 rast = 5
 for i in range(len(stdlist)):
@@ -80,6 +89,9 @@ for i in range(len(stdlist)):
     exec(execute.format(name_btn, i))
     rast += 30
 
+line.bind("<B1-Motion>", vn)
+line.bind("<Button-1>", vn)
+line.bind('<ButtonRelease>', vn)
 root.bind('<Configure>', per)
 
 root.mainloop()
