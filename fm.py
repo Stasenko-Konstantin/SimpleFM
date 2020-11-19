@@ -35,6 +35,15 @@ def left_click{1}(event):\n\
 def per(event):
     upd()
 
+def vn(event):
+    upd()
+
+def get_back():
+    global stdpath
+    stdpath = dop.concat(dop.got_back(stdpath, "\\"))
+    destr(stdlist, stdpath)
+    upd()
+
 def upd():
     global left, right, line
     
@@ -51,9 +60,6 @@ def upd():
 "{0}.place(x=10, y=rast)\n\
 ".format(name_btn))
         rast += 30
-
-def vn(event):
-    upd()
 
 def destr(x, y):
     global rast
@@ -81,6 +87,9 @@ right.place(x=333, y=80)
 
 line = Scale(right, from_ = 1, to = len(stdlist), bg="lemon chiffon")
 line.place(x=1, y=0)
+
+back = Button(root, text="<-", font="Arial 30", fg="ivory4", command=get_back)
+back.place(x=0, y=0)
 
 rast = 5
 for i in range(len(stdlist)):
