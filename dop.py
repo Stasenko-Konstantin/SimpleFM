@@ -12,12 +12,10 @@ def concat(arg):
 
 def got_back(arg, x="\\"):
     g = str_to_list(arg)[::-1]
-    c = "".join(take_while(x, g[1:])[::-1])
-    return c
+    return "".join(take_while(x, g[1:])[::-1])
 
 def str_to_list(arg):
-    c = [i for i in arg]
-    return c
+    return [i for i in arg]
 
 def take_while(f, arg):
     x = mycopy(arg)
@@ -25,22 +23,16 @@ def take_while(f, arg):
         if "".join(x[i:i+1]) == f:
             return x[i+1:]
 
-def smt_lists(stdlist, widget):
+def btn_lists(stdlist):
     widg_list = []
     for i in range(len(stdlist)):
-        name = widget + str(i)
+        name = "btn" + str(i)
         widg_list.append(name)
     return widg_list
 
-def btn_lists(stdlist):
-    return smt_lists(stdlist, "btn")
-
-def radio_lists(stdlist):
-    return smt_lists(stdlist, "radio")
-
 def exec():
     return "\n\
-global {0}, {2}\n\
+global {0}\n\
 def left_click{1}(event):\n\
     global stdpath, stdlist\n\
     if '.' in stdlist[{1}]:\n\
@@ -50,25 +42,16 @@ def left_click{1}(event):\n\
             stdpath = dop.concat(path.abspath(stdpath + stdlist[{1}]))\n\
             print(stdpath)\n\
             btn_list = dop.btn_lists(stdlist)\n\
-            radio_list = dop.radio_lists(stdlist)\n\
             stdlist = dop.sortdir(listdir(path=stdpath))\n\
-            destr(btn_list, stdlist, radio_list)\n\
+            destr(btn_list, stdlist)\n\
             root.title(stdpath)\n\
         except:\n\
             btn_list = dop.btn_lists(stdlist)\n\
-            radio_list = dop.radio_lists(stdlist)\n\
             stdpath = dop.concat(dop.got_back(stdpath))\n\
             stdlist = dop.sortdir(listdir(path=stdpath))\n\
             print(stdpath)\n\
-            destr(btn_list, stdlist, radio_list)\n\
-def radio_click{1}(event):\n\
-    print({1})\n\
+            destr(btn_list, stdlist)\n\
 {0} = Button(right, text=stdlist[i], bg='old lace')\n\
-{0}.bind('<Button-1>', left_click{1})\n\
+{0}.bind('<Double-Button-1>', left_click{1})\n\
 {0}.place(x=10, y=rast)\n\
-var{1} = BooleanVar()\n\
-var{1}.set(0)\n\
-{2} = Checkbutton(right, variable=var{1}, onvalue=1, offvalue=0,bg='lemon chiffon', command=radio_click{1})\n\
-{2}.bind('<Button-1>', radio_click{1})\n\
-{2}.place(x=10, y=rast)\n\
 "
