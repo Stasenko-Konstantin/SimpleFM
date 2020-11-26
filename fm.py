@@ -23,12 +23,6 @@ def paste():
     pass
 
 def per(event):
-    upd()
-
-def vn(event):
-    upd()
-
-def per_m(event):
     global ch
     if event.delta < 0:
         ch = 1
@@ -74,7 +68,7 @@ def destr(x, y):
         name_btn = "btn" + str(i)
         exec(dop.exec().format(name_btn, i))
         rast += 30
-        
+
 root = Tk()
 root.geometry("1000x600")
 root.minsize(1000, 600)
@@ -100,10 +94,10 @@ for i in range(len(stdlist)):
     rast += 30
 
 right.bind("<Button-3>", popup)
-line.bind("<B1-Motion>", vn)
-line.bind("<Button-1>", vn)
-line.bind("<ButtonRelease>", vn)
-root.bind("<Configure>", per)
-root.bind("<MouseWheel>", per_m)
+line.bind("<B1-Motion>", lambda event: upd())
+line.bind("<Button-1>", lambda event: upd())
+line.bind("<ButtonRelease>", lambda event: upd())
+root.bind("<Configure>", lambda event: upd())
+root.bind("<MouseWheel>", per)
 
 root.mainloop()
