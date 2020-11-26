@@ -9,11 +9,18 @@
 
 from tkinter import *
 from os import *
+from subprocess import *
 import dop # Мой дополнительный модуль
 
 stdpath = dop.concat(getenv("SystemDrive"))
 stdlist = dop.sortdir(listdir(path=stdpath))
 ch = 0
+
+def popup(event):
+    menu.post(event.x_root, event.y_root)
+
+def paste():
+    pass
 
 def per(event):
     upd()
@@ -82,6 +89,9 @@ line.place(x=1, y=0)
 back = Button(root, text="<-", font="Arial 30", fg="ivory4", command=get_back)
 back.place(x=0, y=0)
 
+menu = Menu(tearoff=0)
+menu.add_command(label="Вставить", command=paste)
+
 rast = 5
 btn_list = dop.btn_lists(stdlist)
 for i in range(len(stdlist)):
@@ -89,6 +99,7 @@ for i in range(len(stdlist)):
     exec(dop.exec().format(name_btn, i))
     rast += 30
 
+right.bind("<Button-3>", popup)
 line.bind("<B1-Motion>", vn)
 line.bind("<Button-1>", vn)
 line.bind("<ButtonRelease>", vn)
