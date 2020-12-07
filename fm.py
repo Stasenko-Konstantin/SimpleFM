@@ -9,6 +9,7 @@
 
 from tkinter import *
 from os import *
+from shutil import *
 from subprocess import *
 import dop # Мой дополнительный модуль
 
@@ -20,8 +21,13 @@ def popup(event):
     menu.post(event.x_root, event.y_root)
 
 def paste():
-    pass
-
+    if "." in copyname:
+        copyfile(copyname, stdpath[:-1]+(dop.list_to_str(dop.take_while2("\\", copyname[::-1])[::-1])))
+        upd2()
+    else:
+        copytree(copyname, stdpath[:-1]+(dop.list_to_str(dop.take_while2("\\", copyname[::-1])[::-1])))
+        upd2()
+        
 def per(event):
     global ch
     if event.delta < 0:
@@ -36,6 +42,14 @@ def get_back():
     stdpath = dop.concat(dop.got_back(stdpath, "\\"))
     stdlist = dop.sortdir(listdir(path=stdpath))
     destr(btn_list, stdlist)
+
+def upd2():
+    global stdpath, stdlist
+    btn_list = dop.btn_lists(stdlist)
+    stdpath = dop.concat(stdpath)
+    stdlist = dop.sortdir(listdir(path=stdpath))
+    destr(btn_list, stdlist)
+    upd()
 
 def upd():
     global left, right, line, rast, ch

@@ -10,6 +10,9 @@ def mycopy(arg):
 def concat(arg):
     return arg + "\\"
 
+def concat2(arg):
+    return "\\" + arg
+
 def got_back(arg, x="\\"):
     g = str_to_list(arg)[::-1]
     return "".join(take_while(x, g[1:])[::-1])
@@ -17,11 +20,23 @@ def got_back(arg, x="\\"):
 def str_to_list(arg):
     return [i for i in arg]
 
+def list_to_str(arg):
+    string = ""
+    for i in arg:
+        string += str(i)
+    return string
+
 def take_while(f, arg):
     x = mycopy(arg)
     for i in range(len(arg)):
         if "".join(x[i:i+1]) == f:
             return x[i+1:]
+
+def take_while2(f, arg):
+    x = mycopy(arg)
+    for i in range(len(arg)):
+        if "".join(x[i:i+1]) == f:
+            return x[:i+1]
 
 def btn_lists(stdlist):
     widg_list = []
@@ -29,6 +44,9 @@ def btn_lists(stdlist):
         name = "btn" + str(i)
         widg_list.append(name)
     return widg_list
+
+def length(arg):
+    pass
 
 def exec():
     return "\n\
@@ -38,9 +56,15 @@ def copy{1}():\n\
     copyname = path.abspath(stdpath + stdlist[{1}])\n\
     print(copyname)\n\
 def rename{1}():\n\
-    pass\n\
+    {0}ren = Entry(right)\n\
+    {0}ren.place(y=rast, x=10+1)\n\
 def delete{1}():\n\
-    pass\n\
+    if '.' in stdpath + stdlist[{1}]:\n\
+        remove(path.abspath(stdpath + stdlist[{1}]))\n\
+        upd2()\n\
+    else:\n\
+        rmdir(path.abspath(stdpath + stdlist[{1}]))\n\
+        upd2()\n\
 def popup{1}(event):\n\
     menu{1}.post(event.x_root, event.y_root)\n\
 def left_click{1}(event):\n\
