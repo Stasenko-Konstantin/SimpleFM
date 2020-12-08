@@ -45,36 +45,41 @@ def btn_lists(stdlist):
         widg_list.append(name)
     return widg_list
 
-def length(arg):
-    pass
-
 def exec():
     return "\n\
 global {0}\n\
 def copy{1}():\n\
     global copyname\n\
     copyname = path.abspath(stdpath + stdlist[{1}])\n\
-    print(copyname)\n\
-def rename{1}():\n\
-    {0}ren = Entry(right)\n\
-    {0}ren.place(y=rast, x=10+1)\n\
-def delete{1}():\n\
-    if '.' in stdpath + stdlist[{1}]:\n\
-        remove(path.abspath(stdpath + stdlist[{1}]))\n\
+def renok{1}(event):\n\
+    renamename = path.abspath(stdpath + stdlist[{1}])\n\
+    try:\n\
+        error.config(text=' ')\n\
+        rename(renamename, stdpath+{0}ren.get())\n\
         upd2()\n\
+    except:\n\
+        error.config(text='Неверное имя')\n\
+    {0}ren.destroy()\n\
+def rename{1}():\n\
+    global {0}ren\n\
+    {0}ren = Entry(root)\n\
+    {0}ren.place(y=20, x=400)\n\
+    root.bind('<Return>', renok{1})\n\
+def delete{1}():\n\
+    if path.isfile(path.abspath(stdpath + stdlist[{1}])):\n\
+        remove(path.abspath(stdpath + stdlist[{1}]))\n\
     else:\n\
         rmdir(path.abspath(stdpath + stdlist[{1}]))\n\
-        upd2()\n\
+    upd2()\n\
 def popup{1}(event):\n\
     menu{1}.post(event.x_root, event.y_root)\n\
 def left_click{1}(event):\n\
     global stdpath, stdlist\n\
-    if '.' in stdlist[{1}]:\n\
-        pass\n\
+    if path.isfile(path.abspath(stdpath + stdlist[{1}])):\n\
+        startfile(path.abspath(stdpath + stdlist[{1}]))\n\
     else:\n\
         try:\n\
             stdpath = dop.concat(path.abspath(stdpath + stdlist[{1}]))\n\
-            print(stdpath)\n\
             btn_list = dop.btn_lists(stdlist)\n\
             stdlist = dop.sortdir(listdir(path=stdpath))\n\
             destr(btn_list, stdlist)\n\
@@ -83,7 +88,6 @@ def left_click{1}(event):\n\
             btn_list = dop.btn_lists(stdlist)\n\
             stdpath = dop.concat(dop.got_back(stdpath))\n\
             stdlist = dop.sortdir(listdir(path=stdpath))\n\
-            print(stdpath)\n\
             destr(btn_list, stdlist)\n\
 {0} = Button(right, text=stdlist[i], bg='old lace')\n\
 {0}.place(x=10, y=rast)\n\

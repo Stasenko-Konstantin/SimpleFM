@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #! Главный модуль
 
 '''
@@ -9,8 +10,7 @@
 
 from tkinter import *
 from os import *
-from shutil import *
-from subprocess import *
+from shutil import copytree, copyfile
 import dop # Мой дополнительный модуль
 
 stdpath = dop.concat(getenv("SystemDrive"))
@@ -21,12 +21,11 @@ def popup(event):
     menu.post(event.x_root, event.y_root)
 
 def paste():
-    if "." in copyname:
+    if path.isfile(copyname):
         copyfile(copyname, stdpath[:-1]+(dop.list_to_str(dop.take_while2("\\", copyname[::-1])[::-1])))
-        upd2()
     else:
         copytree(copyname, stdpath[:-1]+(dop.list_to_str(dop.take_while2("\\", copyname[::-1])[::-1])))
-        upd2()
+    upd2()    
         
 def per(event):
     global ch
@@ -87,6 +86,9 @@ root = Tk()
 root.geometry("1000x600")
 root.minsize(1000, 600)
 root.title(stdpath)
+
+error = Label(root, text=" ")
+error.place(y=20, x=450)
 
 right = Frame(root, width=4000, height=560, bg="lemon chiffon")
 right.place(x=0, y=80)
