@@ -50,12 +50,12 @@ def exec():
 global {0}\n\
 def copy{1}():\n\
     global copyname\n\
-    copyname = path.abspath(stdpath + stdlist[{1}])\n\
+    copyname = os.path.abspath(stdpath + stdlist[{1}])\n\
 def renok{1}(event):\n\
-    renamename = path.abspath(stdpath + stdlist[{1}])\n\
+    renamename = os.path.abspath(stdpath + stdlist[{1}])\n\
     try:\n\
         error.config(text=' ')\n\
-        rename(renamename, stdpath+{0}ren.get())\n\
+        os.rename(renamename, stdpath+{0}ren.get())\n\
         upd2()\n\
     except:\n\
         error.config(text='Неверное имя')\n\
@@ -66,28 +66,28 @@ def rename{1}():\n\
     {0}ren.place(y=20, x=400)\n\
     root.bind('<Return>', renok{1})\n\
 def delete{1}():\n\
-    if path.isfile(path.abspath(stdpath + stdlist[{1}])):\n\
-        remove(path.abspath(stdpath + stdlist[{1}]))\n\
+    if os.path.isfile(os.path.abspath(stdpath + stdlist[{1}])):\n\
+        os.remove(os.path.abspath(stdpath + stdlist[{1}]))\n\
     else:\n\
-        rmdir(path.abspath(stdpath + stdlist[{1}]))\n\
+        os.rmdir(os.path.abspath(stdpath + stdlist[{1}]))\n\
     upd2()\n\
 def popup{1}(event):\n\
     menu{1}.post(event.x_root, event.y_root)\n\
 def left_click{1}(event):\n\
     global stdpath, stdlist\n\
-    if path.isfile(path.abspath(stdpath + stdlist[{1}])):\n\
-        startfile(path.abspath(stdpath + stdlist[{1}]))\n\
+    if os.path.isfile(os.path.abspath(stdpath + stdlist[{1}])):\n\
+        os.startfile(os.path.abspath(stdpath + stdlist[{1}]))\n\
     else:\n\
         try:\n\
-            stdpath = dop.concat(path.abspath(stdpath + stdlist[{1}]))\n\
+            stdpath = dop.concat(os.path.abspath(stdpath + stdlist[{1}]))\n\
             btn_list = dop.btn_lists(stdlist)\n\
-            stdlist = dop.sortdir(listdir(path=stdpath))\n\
+            stdlist = dop.sortdir(os.listdir(path=stdpath))\n\
             destr(btn_list, stdlist)\n\
             root.title(stdpath)\n\
         except:\n\
             btn_list = dop.btn_lists(stdlist)\n\
             stdpath = dop.concat(dop.got_back(stdpath))\n\
-            stdlist = dop.sortdir(listdir(path=stdpath))\n\
+            stdlist = dop.sortdir(os.listdir(path=stdpath))\n\
             destr(btn_list, stdlist)\n\
 {0} = Button(right, text=stdlist[i], bg='old lace')\n\
 {0}.place(x=10, y=rast)\n\

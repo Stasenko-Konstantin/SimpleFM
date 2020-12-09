@@ -3,29 +3,60 @@
 
 '''
 Автор: Стасенко Константин
-
 О программе: простой файловый менеджер который необходимо было сделать по учебному
 заданию
 '''
 
 from tkinter import *
-from os import *
+import os
 from shutil import copytree, copyfile
 import dop # Мой дополнительный модуль
 
-stdpath = dop.concat(getenv("SystemDrive"))
-stdlist = dop.sortdir(listdir(path=stdpath))
+stdpath = dop.concat(os.getenv("SystemDrive"))
+stdlist = dop.sortdir(os.listdir(path=stdpath))
 ch = 0
 
 def popup(event):
     menu.post(event.x_root, event.y_root)
 
 def paste():
-    if path.isfile(copyname):
+    if os.path.isfile(copyname):
         copyfile(copyname, stdpath[:-1]+(dop.list_to_str(dop.take_while2("\\", copyname[::-1])[::-1])))
     else:
         copytree(copyname, stdpath[:-1]+(dop.list_to_str(dop.take_while2("\\", copyname[::-1])[::-1])))
-    upd2()    
+    upd2()
+
+def createfile():
+    global cen
+    cen = Entry(root)
+    cen.place(y=20, x=400)
+    root.bind('<Return>', createfile2)
+
+def createfile2(event):
+    try:
+        error.config(text=" ")
+        f = open(str(stdpath+cen.get()), "w")
+        f.write(" ")
+        f.close()
+        upd2()
+    except:
+        error.config(text='Неверное имя')
+    cen.destroy()
+
+def createdir():
+    global cen
+    cen = Entry(root)
+    cen.place(y=20, x=400)
+    root.bind('<Return>', createdir2)
+
+def createdir2(event):
+    #try:
+    error.config(text=" ")
+    os.makedirs(stdpath+cen.get())
+    upd2()
+    #except:
+        #error.config(text='Неверное имя')
+    cen.destroy()
         
 def per(event):
     global ch
@@ -39,14 +70,14 @@ def get_back():
     global stdpath, stdlist
     btn_list = dop.btn_lists(stdlist)
     stdpath = dop.concat(dop.got_back(stdpath, "\\"))
-    stdlist = dop.sortdir(listdir(path=stdpath))
+    stdlist = dop.sortdir(os.listdir(path=stdpath))
     destr(btn_list, stdlist)
 
 def upd2():
     global stdpath, stdlist
     btn_list = dop.btn_lists(stdlist)
     stdpath = dop.concat(stdpath)
-    stdlist = dop.sortdir(listdir(path=stdpath))
+    stdlist = dop.sortdir(os.listdir(path=stdpath))
     destr(btn_list, stdlist)
     upd()
 
@@ -101,6 +132,8 @@ back.place(x=0, y=0)
 
 menu = Menu(tearoff=0)
 menu.add_command(label="Вставить", command=paste)
+menu.add_command(label="Создать файл", command=createfile)
+menu.add_command(label="Создать папку", command=createdir)
 
 rast = 5
 btn_list = dop.btn_lists(stdlist)
