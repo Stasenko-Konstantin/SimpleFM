@@ -1,40 +1,40 @@
-#37
+#37                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 import nimpy
 
 proc sortdir*(arg: seq[string]): seq[string] {.exportpy.} =
-	var
-		x1: seq[string]
-		x2: seq[string]
-	for i in arg:
-		if "." in i:
-			x2.add(i)
-		else:
-			x1.add(i)
-	result = x1 & x2
+  var
+    x1: seq[string]
+    x2: seq[string]
+  for i in arg:
+    if "." in i:
+      x2.add(i)
+    else:
+      x1.add(i)
+  result = x1 & x2
 
 proc mycopy*[T](arg: seq[T]): seq[T] {.exportpy.} =
-	var result: seq[T]
-	for i in arg:
-		result.add(i)
+  var result: seq[T]
+  for i in arg:
+    result.add(i)
 
 proc concat*(arg: string): string {.exportpy.} =
-	return arg & "//"
+  return arg & "//"
 
 proc concat2*(arg: string): string {.exportpy.} = 
-	return "//" & arg
+  return "//" & arg
 
 proc str_to_list*(arg: string): {.exportpy.} =
-	var result = seq[string]
-	for i in arg:
-		result.add(i)
+  var result = seq[string]
+  for i in arg:
+    result.add(i)
 
 proc list_to_str*(arg: seq[string]): string {.exportpy.} = 
-	var result = ""
-	for i in arg:
-		result & i
+  var result = ""
+  for i in arg:
+    result & i
 
 proc reverse[T](arg: seq[T]): seq[T] {.exportpy.} = 
-	proc help
+  proc help
 
 proc got_back*(arg: string): string {.exportpy.} =
 
