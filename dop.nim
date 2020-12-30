@@ -1,57 +1,50 @@
-#! Модуль вспомогательных функций
+#41
+import nimpy
 
-def sortdir(arg):
-    x1, x2 = [i for i in arg if not "." in i], [i for i in arg if "." in i]
-    return x1 + x2
+proc sortdir*(arg: seq[string]): seq[string] {.exportpy.} =
+  var
+    x1 = @[""]
+    x2 = @[""]
+  for i in arg:
+    echo i
+    if '.' in i:
+      x2.add(i)
+    else:
+      x1.add(i)
+  result = x1[1..x1.len-1] & x2[1..x2.len-1]
 
-def mycopy(arg):
-    return [i for i in arg]
+proc mycopy*[T](arg: seq[T]): seq[T] {.exportpy.} =
+  result = @[]
+  for i in arg:
+    result.add(i)
 
-def concat(arg):
-    return arg + "\\"
+proc concat*(arg: string): string {.exportpy.} =
+  return arg & "//"
 
-def concat2(arg):
-    return "\\" + arg
+proc concat2*(arg: string): string {.exportpy.} = 
+  return "//" & arg
 
-def got_back(arg, x="\\"):
-    g = str_to_list(arg)[::-1]
-    print("1: ", arg)
-    print("2: ", g)
-    print("3: ", take_while(x, g[1:]))
-    print("4: ", "".join(take_while(x, g[1:])))
-    print("5: ", "".join(take_while(x, g[1:])[::-1]))
-    return "".join(take_while(x, g[1:])[::-1])
+proc str_to_list*(arg: string): seq[string] {.exportpy.} =
+  return @arg
 
-def str_to_list(arg):
-    return [i for i in arg]
+proc list_to_str*(arg: seq[string]): string {.exportpy.} = 
+  result = ""
+  for i in arg:
+    result &= i
 
-def list_to_str(arg):
-    string = ""
-    for i in arg:
-        string += str(i)
-    return string
+proc reverse[T](arg: seq[T]): seq[T] = 
+  if arg == @[]:
+    return @[]
+  else:
+    return reverse(arg[1..arg.len-1]) & arg[0]
 
-def take_while(f, arg):
-    print(arg)
-    x = mycopy(arg)
-    for i in range(len(arg)):
-        if "".join(x[i:i+1]) == f:
-            return x[i+1:]
+proc take_while*()
 
-def take_while2(f, arg):
-    x = mycopy(arg)
-    for i in range(len(arg)):
-        if "".join(x[i:i+1]) == f:
-            return x[:i+1]
+proc got_back*(arg: string): string {.exportpy.} =
+	result = str_to_list(arg).reverse()
+	result = list_to_str(take_while(result, "\\").reverse())
 
-def btn_lists(stdlist):
-    widg_list = []
-    for i in range(len(stdlist)):
-        name = "btn" + str(i)
-        widg_list.append(name)
-    return widg_list
-
-def exec():
+proc exec*(): string {.exportpy.} =
     return "\n\
 global {0}\n\
 def copy{1}():\n\
