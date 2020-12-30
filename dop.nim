@@ -1,4 +1,3 @@
-#41
 import nimpy
 
 proc sortdir*(arg: seq[string]): seq[string] {.exportpy.} =
@@ -13,11 +12,6 @@ proc sortdir*(arg: seq[string]): seq[string] {.exportpy.} =
       x1.add(i)
   result = x1[1..x1.len-1] & x2[1..x2.len-1]
 
-proc mycopy*[T](arg: seq[T]): seq[T] {.exportpy.} =
-  result = @[]
-  for i in arg:
-    result.add(i)
-
 proc concat*(arg: string): string {.exportpy.} =
   return arg & "//"
 
@@ -25,12 +19,15 @@ proc concat2*(arg: string): string {.exportpy.} =
   return "//" & arg
 
 proc str_to_list*(arg: string): seq[string] {.exportpy.} =
-  return @arg
+  result = @[]
+  for i in arg:
+    result.add($i)
 
 proc list_to_str*(arg: seq[string]): string {.exportpy.} = 
-  result = ""
+  var r = ""
   for i in arg:
-    result &= i
+    r &= i
+  return r
 
 proc reverse[T](arg: seq[T]): seq[T] = 
   if arg == @[]:
@@ -38,62 +35,25 @@ proc reverse[T](arg: seq[T]): seq[T] =
   else:
     return reverse(arg[1..arg.len-1]) & arg[0]
 
-proc take_while*()
+proc take_while*(arg: seq[string], spl: string): seq[string] {.exportpy.} =
+  result = arg
+  for i in 0..arg.len:
+    if list_to_str(result[i..i+1]) == spl:
+      return result[i+1..result.len-1]
 
-proc got_back*(arg: string): string {.exportpy.} =
-	result = str_to_list(arg).reverse()
-	result = list_to_str(take_while(result, "\\").reverse())
+proc take_while2*(arg: seq[string], spl: string): seq[string] {.exportpy.} =
+  result = arg
+  for i in 0..arg.len:
+    if list_to_str(result[i..i+1]) == spl:
+      return result[0..i+1]
 
-proc exec*(): string {.exportpy.} =
-    return "\n\
-global {0}\n\
-def copy{1}():\n\
-    global copyname\n\
-    copyname = os.path.abspath(stdpath + stdlist[{1}])\n\
-def renok{1}(event):\n\
-    renamename = os.path.abspath(stdpath + stdlist[{1}])\n\
-    try:\n\
-        error.config(text=' ')\n\
-        os.rename(renamename, stdpath+{0}ren.get())\n\
-        upd2()\n\
-    except:\n\
-        error.config(text='Неверное имя')\n\
-    {0}ren.destroy()\n\
-def rename{1}():\n\
-    global {0}ren\n\
-    {0}ren = Entry(root)\n\
-    {0}ren.place(y=20, x=400)\n\
-    root.bind('<Return>', renok{1})\n\
-def delete{1}():\n\
-    if os.path.isfile(os.path.abspath(stdpath + stdlist[{1}])):\n\
-        os.remove(os.path.abspath(stdpath + stdlist[{1}]))\n\
-    else:\n\
-        os.rmdir(os.path.abspath(stdpath + stdlist[{1}]))\n\
-    upd2()\n\
-def popup{1}(event):\n\
-    menu{1}.post(event.x_root, event.y_root)\n\
-def left_click{1}(event):\n\
-    global stdpath, stdlist\n\
-    if os.path.isfile(os.path.abspath(stdpath + stdlist[{1}])):\n\
-        os.startfile(os.path.abspath(stdpath + stdlist[{1}]))\n\
-    else:\n\
-        try:\n\
-            stdpath = dop.concat(os.path.abspath(stdpath + stdlist[{1}]))\n\
-            btn_list = dop.btn_lists(stdlist)\n\
-            stdlist = dop.sortdir(os.listdir(path=stdpath))\n\
-            destr(btn_list, stdlist)\n\
-            root.title(stdpath)\n\
-        except:\n\
-            btn_list = dop.btn_lists(stdlist)\n\
-            stdpath = dop.concat(dop.got_back(stdpath))\n\
-            stdlist = dop.sortdir(os.listdir(path=stdpath))\n\
-            destr(btn_list, stdlist)\n\
-{0} = Button(right, text=stdlist[i], bg='old lace')\n\
-{0}.place(x=10, y=rast)\n\
-menu{1} = Menu(tearoff=0)\n\
-menu{1}.add_command(label='Копировать', command=copy{1})\n\
-menu{1}.add_command(label='Переименовать', command=rename{1})\n\
-menu{1}.add_command(label='Удалить', command=delete{1})\n\
-{0}.bind('<Double-Button-1>', left_click{1})\n\
-{0}.bind('<Button-3>', popup{1})\n\
-"
+proc got_back*(arg: string, spl: string): string {.exportpy.} =
+  var r = str_to_list(arg).reverse()
+  return list_to_str(take_while(r, spl).reverse())
+
+proc btn_lists*(stdlist: seq[string]): seq[string] {.exportpy.} =
+  result = @[]
+  var name = ""
+  for i in 0..stdlist.len-1:
+    name = "btn" & $i
+    result.add(name)
