@@ -104,12 +104,12 @@ def createdir():
     root.bind('<Return>', createdir2)
 
 def createdir2(event):
-    #try:
-    error.config(text=" ")
-    os.makedirs(stdpath+cen.get())
-    upd2()
-    #except:
-        #error.config(text='Неверное имя')
+    try:
+        error.config(text=" ")
+        os.makedirs(stdpath+cen.get())
+        upd2()
+    except:
+        error.config(text='Неверное имя')
     cen.destroy()
         
 def per(event):
@@ -123,7 +123,9 @@ def per(event):
 def get_back():
     global stdpath, stdlist
     btn_list = dop.btn_lists(stdlist)
+    print("prev", stdpath)
     stdpath = dop.concat(dop.got_back(stdpath, "\\"))
+    print("curr ", stdpath)
     stdlist = dop.sortdir(os.listdir(path=stdpath))
     destr(btn_list, stdlist)
 

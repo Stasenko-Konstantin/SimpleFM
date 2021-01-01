@@ -5,7 +5,6 @@ proc sortdir*(arg: seq[string]): seq[string] {.exportpy.} =
     x1 = @[""]
     x2 = @[""]
   for i in arg:
-    echo i
     if '.' in i:
       x2.add(i)
     else:
@@ -13,10 +12,10 @@ proc sortdir*(arg: seq[string]): seq[string] {.exportpy.} =
   result = x1[1..x1.len-1] & x2[1..x2.len-1]
 
 proc concat*(arg: string): string {.exportpy.} =
-  return arg & "//"
+  return arg & r"\"
 
 proc concat2*(arg: string): string {.exportpy.} = 
-  return "//" & arg
+  return r"\" & arg
 
 proc str_to_list*(arg: string): seq[string] {.exportpy.} =
   result = @[]
@@ -37,15 +36,21 @@ proc reverse[T](arg: seq[T]): seq[T] =
 
 proc take_while*(arg: seq[string], spl: string): seq[string] {.exportpy.} =
   result = arg
-  for i in 0..arg.len:
-    if list_to_str(result[i..i+1]) == spl:
-      return result[i+1..result.len-1]
+  for i in 0..arg.len-2:
+    try:
+      if $result[i..i+1] == spl:
+        return result[i..result.len-1]
+    except:
+      return result[0..i]
 
 proc take_while2*(arg: seq[string], spl: string): seq[string] {.exportpy.} =
   result = arg
-  for i in 0..arg.len:
-    if list_to_str(result[i..i+1]) == spl:
-      return result[0..i+1]
+  for i in 0..arg.len-2:
+    try:
+      if $result[i..i+1] == spl:
+        return result[0..i]
+    except:
+      return result[0..i]
 
 proc got_back*(arg: string, spl: string): string {.exportpy.} =
   var r = str_to_list(arg).reverse()
