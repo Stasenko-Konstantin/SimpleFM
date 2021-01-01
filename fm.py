@@ -84,6 +84,7 @@ menu{1}.add_command(label='Удалить', command= lambda: Exec.delete({1}))\n
 stdpath = dop.concat(os.getenv("SystemDrive"))
 stdlist = dop.sortdir(os.listdir(path=stdpath))
 ch = 0
+rast = 0
 
 def popup(event):
     menu.post(event.x_root, event.y_root)
@@ -153,9 +154,10 @@ def upd2():
     upd()
 
 def upd():
-    global left, right, line, rast, ch
+    global left, right, line, rast, ch, panel
     
-    right.config(height=root.winfo_height()-80)
+    panel.config(width=root.winfo_width(), height=root.winfo_height()-80)
+    right.config(width=root.winfo_width())
 
     line.config(to=len(stdlist), length=root.winfo_height()-85)
     line.place(x=root.winfo_width()-40)
@@ -165,12 +167,8 @@ def upd():
     ch = 0
     ref = line.get()
     rast = 30 - ref * 30
-    for i in range(len(stdlist)):
-        name_btn = "btn" + str(i)
-        exec(
-"{0}.place(x=10, y=rast)\n\
-".format(name_btn))
-        rast += 30
+    
+    right.place(x=10, y=rast)
 
 def destr(x, y):
     global rast
@@ -192,10 +190,13 @@ root.title(stdpath)
 error = Label(root, text=" ")
 error.place(y=20, x=450)
 
-right = Frame(root, width=4000, height=560, bg="lemon chiffon")
+panel = Frame(root, width=1000, height=600, bg="lemon chiffon")
+panel.place(x=0, y=80)
+
+right = Frame(panel, width=4000, height=9999999, bg="lemon chiffon")
 right.place(x=0, y=80)
 
-line = Scale(right, from_ = 1, to = len(stdlist), bg="lemon chiffon")
+line = Scale(panel, from_ = 1, to = len(stdlist), bg="lemon chiffon")
 line.place(x=1, y=0)
 
 back = Button(root, text="<-", font="Arial 30", fg="ivory4", command=get_back)
