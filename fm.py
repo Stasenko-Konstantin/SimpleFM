@@ -9,6 +9,7 @@
 
 from tkinter import *
 import os
+import codecs
 from shutil import copytree, copyfile
 import dop # Мой дополнительный модуль
 
@@ -86,14 +87,26 @@ stdlist = dop.sortdir(os.listdir(path=stdpath))
 ch = 0
 rast = 0
 
+def take_while2(f, arg):
+    x = [i for i in arg]
+    for i in range(len(arg)):
+        if "".join(x[i:i+1]) == f:
+            return x[:i+1]
+
 def popup(event):
     menu.post(event.x_root, event.y_root)
 
 def paste():
     if os.path.isfile(copyname):
-        copyfile(copyname, stdpath[:-1]+(dop.list_to_str(dop.take_while2("\\", copyname[::-1])[::-1])))
+        two = (dop.list_to_str(take_while2("\\", copyname[::-1])[::-1]))
+        print(stdpath[:-1])
+        print(two)
+        copyfile(copyname, stdpath[:-1]+two)
     else:
-        copytree(copyname, stdpath[:-1]+(dop.list_to_str(dop.take_while2("\\", copyname[::-1])[::-1])))
+        two = (dop.list_to_str(take_while2("\\", copyname[::-1])[::-1]))
+        print(stdpath[:-1])
+        print(two)
+        copytree(copyname, stdpath[:-1]+two)
     upd2()
 
 def createfile():
@@ -139,9 +152,7 @@ def per(event):
 def get_back():
     global stdpath, stdlist
     btn_list = dop.btn_lists(stdlist)
-    print("prev", stdpath)
     stdpath = dop.concat(dop.got_back(stdpath, "\\"))
-    print("curr ", stdpath)
     stdlist = dop.sortdir(os.listdir(path=stdpath))
     destr(btn_list, stdlist)
 

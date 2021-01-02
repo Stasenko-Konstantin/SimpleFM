@@ -1,3 +1,4 @@
+#nim c --threads:on --app:lib --out:dop.pyd dop
 import nimpy
 
 proc sortdir*(arg: seq[string]): seq[string] {.exportpy.} =
@@ -12,9 +13,13 @@ proc sortdir*(arg: seq[string]): seq[string] {.exportpy.} =
   result = x1[1..x1.len-1] & x2[1..x2.len-1]
 
 proc concat*(arg: string): string {.exportpy.} =
+  if $arg[arg.len-1] == r"\":
+    return arg
   return arg & r"\"
 
 proc concat2*(arg: string): string {.exportpy.} = 
+  if $arg[0] == r"\":
+    return arg
   return r"\" & arg
 
 proc str_to_list*(arg: string): seq[string] {.exportpy.} =
@@ -35,22 +40,10 @@ proc reverse[T](arg: seq[T]): seq[T] =
     return reverse(arg[1..arg.len-1]) & arg[0]
 
 proc take_while*(arg: seq[string], spl: string): seq[string] {.exportpy.} =
-  result = arg
+  result = arg[1..arg.len-1]
   for i in 0..arg.len-2:
-    try:
-      if $result[i..i+1] == spl:
-        return result[i..result.len-1]
-    except:
-      return result[0..i]
-
-proc take_while2*(arg: seq[string], spl: string): seq[string] {.exportpy.} =
-  result = arg
-  for i in 0..arg.len-2:
-    try:
-      if $result[i..i+1] == spl:
-        return result[0..i]
-    except:
-      return result[0..i]
+    if $result[i] == $spl:
+      return result[i..result.len-1]
 
 proc got_back*(arg: string, spl: string): string {.exportpy.} =
   var r = str_to_list(arg).reverse()
