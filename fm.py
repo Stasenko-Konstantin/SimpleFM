@@ -9,7 +9,6 @@
 
 from tkinter import *
 import os
-import codecs
 from shutil import copytree, copyfile
 import dop # Мой дополнительный модуль
 
@@ -64,26 +63,25 @@ class Exec:
                 root.title(stdpath)
             except:
                 btn_list = dop.btn_lists(stdlist)
-                stdpath = dop.concat(dop.got_back(stdpath))
+                stdpath = dop.concat(dop.got_back(stdpath, "\\"))
                 stdlist = dop.sortdir(os.listdir(path=stdpath))
                 destr(btn_list, stdlist)
 
     @staticmethod
-    def exec():
-        return "\n\
-global {0}\n\
-{0} = Button(right, text=stdlist[i], bg='old lace')\n\
-{0}.place(x=10, y=rast)\n\
-menu{1} = Menu(tearoff=0)\n\
-menu{1}.add_command(label='Копировать', command= lambda: Exec.copy({1}))\n\
-menu{1}.add_command(label='Переименовать', command= lambda: Exec.rename({1}))\n\
-menu{1}.add_command(label='Удалить', command= lambda: Exec.delete({1}))\n\
-{0}.bind('<Double-Button-1>', lambda event: Exec.left_click({1}))\n\
-{0}.bind('<Button-3>', lambda event: Exec.popup(event, menu{1}))\n\
-"
+    def exec(name_btn, i, rast):
+        global btn
+        btns[name_btn] = Button(right, text=stdlist[i], bg='old lace')
+        btns[name_btn].place(x=10, y=rast)
+        menu = Menu(tearoff=0)
+        menu.add_command(label='Копировать', command= lambda: Exec.copy(i))
+        menu.add_command(label='Переименовать', command= lambda: Exec.rename(i))
+        menu.add_command(label='Удалить', command= lambda: Exec.delete(i))
+        btns[name_btn].bind('<Double-Button-1>', lambda event: Exec.left_click(i))
+        btns[name_btn].bind('<Button-3>', lambda event: Exec.popup(event, menu))
 
 stdpath = dop.concat(os.getenv("SystemDrive"))
 stdlist = dop.sortdir(os.listdir(path=stdpath))
+btns = {}
 ch = 0
 rast = 0
 
@@ -182,15 +180,13 @@ def upd():
     right.place(x=10, y=rast)
 
 def destr(x, y):
-    global rast
+    global rast, btns
     rast = 5
     for i in x:
-        exec(
-"{0}.destroy()\n\
-".format(i))
+        btns[i].destroy()
     for i in range(len(y)):
         name_btn = "btn" + str(i)
-        exec(Exec.exec().format(name_btn, i))
+        Exec.exec(name_btn, i, rast)
         rast += 30
 
 root = Tk()
@@ -222,7 +218,7 @@ rast = 5
 btn_list = dop.btn_lists(stdlist)
 for i in range(len(stdlist)):
     name_btn = "btn" + str(i)
-    exec(Exec.exec().format(name_btn, i))
+    Exec.exec(name_btn, i, rast)
     rast += 30
 
 right.bind("<Button-3>", popup)
