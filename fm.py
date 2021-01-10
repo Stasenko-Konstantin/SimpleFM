@@ -219,6 +219,6 @@ line.bind("<B1-Motion>", lambda event: upd())
 line.bind("<Button-1>", lambda event: upd())
 line.bind("<ButtonRelease>", lambda event: upd())
 root.bind("<Configure>", lambda event: upd())
-root.bind("<MouseWheel>", per)
+#root.bind("<MouseWheel>", per)
 
 root.mainloop()
