@@ -45,6 +45,12 @@ proc take_while*(arg: seq[string], spl: string): seq[string] {.exportpy.} =
     if $result[i] == $spl:
       return result[i..result.len-1]
 
+proc take_while2*(spl: string, arg: seq[string]): seq[string] {.exportpy.} =
+  result = arg[1..arg.len-1]
+  for i in 0..arg.len-2:
+    if $result[i..i+1] == spl:
+      return result[0..i+1]
+
 proc got_back*(arg: string, spl: string): string {.exportpy.} =
   var r = str_to_list(arg).reverse()
   return list_to_str(take_while(r, spl).reverse())
