@@ -8,8 +8,10 @@
 '''
 
 from tkinter import *
-import os
+from tkinter.ttk import Combobox
 from shutil import copytree, copyfile
+from win32api import GetLogicalDriveStrings
+import os
 import dop # Мой дополнительный модуль
 
 class Exec:
@@ -79,7 +81,8 @@ class Exec:
         btns[name_btn].bind('<Double-Button-1>', lambda event: Exec.left_click(i))
         btns[name_btn].bind('<Button-3>', lambda event: Exec.popup(event, menu))
 
-stdpath = dop.concat(os.getenv("SystemDrive"))
+drives = GetLogicalDriveStrings().split("\000")[:-1]
+stdpath = dop.concat(drives[0])
 stdlist = dop.sortdir(os.listdir(path=stdpath))
 btns = {}
 ch = 0
@@ -146,6 +149,7 @@ def get_back():
     stdpath = dop.concat(dop.got_back(stdpath, "\\"))
     stdlist = dop.sortdir(os.listdir(path=stdpath))
     destr(btn_list, stdlist)
+    root.title(stdpath)
 
 def upd2():
     global stdpath, stdlist
@@ -164,6 +168,8 @@ def upd():
     line.config(to=len(stdlist), length=root.winfo_height()-85)
     line.place(x=root.winfo_width()-40)
 
+    drives_switch.place(x=root.winfo_width()-150)
+
     ref = line.get()
     line.set(ref + ch)
     ch = 0
@@ -181,6 +187,14 @@ def destr(x, y):
         name_btn = "btn" + str(i)
         Exec.exec(name_btn, i, rast)
         rast += 30
+
+def change_drive():
+    global stdpath, stdlist
+    btn_list = dop.btn_lists(stdlist)
+    stdpath = dop.concat(drives_switch.get())
+    stdlist = dop.sortdir(os.listdir(path=stdpath))
+    destr(btn_list, stdlist)
+    root.title(stdpath)
 
 root = Tk()
 root.geometry("1000x600")
@@ -202,6 +216,10 @@ line.place(x=1, y=0)
 back = Button(root, text="<-", font="Arial 30", fg="ivory4", command=get_back)
 back.place(x=0, y=0)
 
+drives_switch = Combobox(root, values=drives)
+drives_switch.place(x=0, y=50)
+drives_switch.current(0)
+
 menu = Menu(tearoff=0)
 menu.add_command(label="Вставить", command=paste)
 menu.add_command(label="Создать файл", command=createfile)
@@ -219,6 +237,7 @@ line.bind("<B1-Motion>", lambda event: upd())
 line.bind("<Button-1>", lambda event: upd())
 line.bind("<ButtonRelease>", lambda event: upd())
 root.bind("<Configure>", lambda event: upd())
-#root.bind("<MouseWheel>", per)
+root.bind("<MouseWheel>", per)
+drives_switch.bind("<<ComboboxSelected>>", lambda event: change_drive())
 
 root.mainloop()
