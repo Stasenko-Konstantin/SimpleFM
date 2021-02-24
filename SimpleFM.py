@@ -62,7 +62,6 @@ class Exec:
                 btn_list = dop.btn_lists(stdlist)
                 stdlist = dop.sortdir(os.listdir(path=stdpath))
                 destr(btn_list, stdlist)
-                root.title(stdpath)
                 drives_switch.set(stdpath)
             except:
                 btn_list = dop.btn_lists(stdlist)
@@ -151,7 +150,6 @@ def change_path(path):
     stdlist = dop.sortdir(os.listdir(path=stdpath))
     destr(btn_list, stdlist)
     drives_switch.set(path)
-    root.title(stdpath)
 
 def get_back():
     change_path(dop.got_back(stdpath, "\\"))
@@ -199,7 +197,7 @@ def change_drive():
 root = Tk()
 root.geometry("1000x600")
 root.minsize(1000, 600)
-root.title(stdpath)
+root.title("SimpleFM")
 
 error = Label(root, text=" ")
 error.place(y=20, x=450)
