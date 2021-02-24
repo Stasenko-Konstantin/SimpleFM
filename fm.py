@@ -63,6 +63,7 @@ class Exec:
                 stdlist = dop.sortdir(os.listdir(path=stdpath))
                 destr(btn_list, stdlist)
                 root.title(stdpath)
+                drives_switch.set(stdpath)
             except:
                 btn_list = dop.btn_lists(stdlist)
                 stdpath = dop.concat(dop.got_back(stdpath, "\\"))
@@ -143,13 +144,17 @@ def per(event):
         ch = -1
     upd()
 
-def get_back():
+def change_path(path):
     global stdpath, stdlist
     btn_list = dop.btn_lists(stdlist)
-    stdpath = dop.concat(dop.got_back(stdpath, "\\"))
+    stdpath = dop.concat(path)
     stdlist = dop.sortdir(os.listdir(path=stdpath))
     destr(btn_list, stdlist)
+    drives_switch.set(path)
     root.title(stdpath)
+
+def get_back():
+    change_path(dop.got_back(stdpath, "\\"))
 
 def upd2():
     global stdpath, stdlist
@@ -189,12 +194,7 @@ def destr(x, y):
         rast += 30
 
 def change_drive():
-    global stdpath, stdlist
-    btn_list = dop.btn_lists(stdlist)
-    stdpath = dop.concat(drives_switch.get())
-    stdlist = dop.sortdir(os.listdir(path=stdpath))
-    destr(btn_list, stdlist)
-    root.title(stdpath)
+    change_path(drives_switch.get())
 
 root = Tk()
 root.geometry("1000x600")
@@ -239,5 +239,6 @@ line.bind("<ButtonRelease>", lambda event: upd())
 root.bind("<Configure>", lambda event: upd())
 root.bind("<MouseWheel>", per)
 drives_switch.bind("<<ComboboxSelected>>", lambda event: change_drive())
+drives_switch.bind("<Return>", lambda event: change_drive())
 
 root.mainloop()
