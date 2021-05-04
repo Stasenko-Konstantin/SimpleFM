@@ -5,7 +5,7 @@
 
 ----------
 
-Simple file manager
+Simple file manager                                
 Works under Windows only
 
 It's better not to copy folders into themselves, I warned)
